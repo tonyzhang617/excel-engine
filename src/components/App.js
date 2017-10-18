@@ -1,12 +1,26 @@
 import '../assets/css/App.css';
 import React, { Component } from 'react';
+import Files from 'react-files';
 
 class App extends React.Component {
+  onFilesChange(files) {
+    const { path } = files[0];
+    console.log(path);
+  }
+
   render() {
     return (
       <div>
-        <h1>Hello, Electron!</h1>
-        <p>I hope you enjoy using basic-electron-react-boilerplate to start your dev off right!</p>
+        <Files
+          onChange={this.onFilesChange}
+          accepts={['image/png', 'text/plain', 'audio/*']}
+          multiple
+          maxFiles={3}
+          maxFileSize={10000000}
+          minFileSize={0}
+          clickable>
+          Drop files here or click to upload
+        </Files>
       </div>
     );
   }
