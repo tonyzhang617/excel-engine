@@ -1,11 +1,24 @@
 import '../assets/css/App.css';
 import React, { Component } from 'react';
 import Files from 'react-files';
+import * as XLSX from 'xlsx';
+import fs, { readFile } from 'fs';
+
+const input = res => res;
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onFilesChange = this.onFilesChange.bind(this);
+  }
+
   onFilesChange(files) {
     const { path } = files[0];
     console.log(path);
+
+    const wb = XLSX.readFile(path);
+    var data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1});
+	  console.log(data);
   }
 
   render() {
@@ -13,7 +26,6 @@ class App extends React.Component {
       <div>
         <Files
           onChange={this.onFilesChange}
-          accepts={['image/png', 'text/plain', 'audio/*']}
           multiple
           maxFiles={3}
           maxFileSize={10000000}
