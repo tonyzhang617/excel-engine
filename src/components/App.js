@@ -8,6 +8,10 @@ import 'react-datasheet/lib/react-datasheet.css';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      hasFile: false,
+      table: null
+    };
     this.onFilesChange = this.onFilesChange.bind(this);
   }
 
@@ -15,30 +19,41 @@ class App extends React.Component {
     const { path } = files[0];
     console.log(path);
 
-    const wb = XLSX.readFile(path);
+    const wb = XLSX.readFile(path, {
+      cellStyles: true,
+      sheetRows: 20
+    });
     var data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1});
 	  console.log(data);
+    this.setState({
+      hasFile: true,
+      table: data
+    });
   }
 
   render() {
     return (
       <div>
-        <Files
-          onChange={this.onFilesChange}
-          multiple
-          maxFiles={3}
-          maxFileSize={10000000}
-          minFileSize={0}
-          clickable>
-          Drop files here or click to upload
-        </Files>
-        <ReactDataSheet
-          data={[
-            [{value:  1}, {value:  3}],
-            [{value:  2}, {value:  4}]
-          ]}
-          valueRenderer={(cell) => cell.value}
-        />
+        {
+          (!this.state.hasFile) ? (
+            <Files
+              onChange={this.onFilesChange}
+              multiple
+              maxFiles={3}
+              maxFileSize={10000000}
+              minFileSize={0}
+              clickable>
+              Drop files here or click to upload
+            </Files>
+          ) : (
+            <ReactDataSheet
+              data={
+                this.state.table
+              }
+              valueRenderer={value => value}
+            />
+          )
+        }
       </div>
     );
   }
