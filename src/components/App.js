@@ -1,10 +1,9 @@
-import '../assets/css/App.css';
 import React, { Component } from 'react';
 import Files from 'react-files';
 import * as XLSX from 'xlsx';
 import fs, { readFile } from 'fs';
-
-const input = res => res;
+import ReactDataSheet from 'react-datasheet';
+import 'react-datasheet/lib/react-datasheet.css';
 
 class App extends React.Component {
   constructor(props) {
@@ -33,6 +32,13 @@ class App extends React.Component {
           clickable>
           Drop files here or click to upload
         </Files>
+        <ReactDataSheet
+          data={[
+            [{value:  1}, {value:  3}],
+            [{value:  2}, {value:  4}]
+          ]}
+          valueRenderer={(cell) => cell.value}
+        />
       </div>
     );
   }
